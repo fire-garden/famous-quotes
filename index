@@ -18,44 +18,37 @@
     <script>
         let quotes = [];
         let currentIndex = 0;
-
-        async function loadQuotes() {
-            try {
-                const response = await fetch('quotes.txt');
-                const text = await response.text();
+        function loadQuotes() {
+        fetch('https://fire-garden.github.io/famous-quotes/quotes.txt')
+            .then(response => response.text())
+            .then(text => {
                 quotes = text.split('\n');
                 displayQuote();
-            } catch (error) {
-                console.error("加载名言失败：", error);
-            }
+            });
+    }
+
+    function displayQuote() {
+        if (currentIndex >= quotes.length) {
+            currentIndex = 0;
         }
+        document.getElementById('quote').innerText = quotes[currentIndex];
+        currentIndex++;
+    }
 
-        function displayQuote() {
-            if (currentIndex >= quotes.length) {
-                currentIndex = 0;
-            }
-            document.getElementById('quote').innerText = quotes[currentIndex];
-            currentIndex++;
-        }
-
-        function setupAutoChangeQuote() {
-            setInterval(() => {
-                displayQuote();
-            }, 3600000);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadQuotes();
-            setupAutoChangeQuote();
-        });
-
-        document.addEventListener('click', () => {
+    function setupAutoChangeQuote() {
+        setInterval(() => {
             displayQuote();
-        });
+        }, 3600000); // 每隔一个小时更换名言
+    }
 
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadQuotes();
+        setupAutoChangeQuote();
+    });
+
+</script>
 </head>
-<body>
+<body onclick="displayQuote()">
     <div id="quote"></div>
 </body>
 </html>
