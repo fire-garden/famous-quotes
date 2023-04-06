@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名言展示</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 24px;
+            background-color: #f0f0f0;
+        }
+    </style>
+    <script>
+        let quotes = [];
+        let currentIndex = 0;
+
+        async function loadQuotes() {
+            try {
+                const response = await fetch('quotes.txt');
+                const text = await response.text();
+                quotes = text.split('\n');
+                displayQuote();
+            } catch (error) {
+                console.error("加载名言失败：", error);
+            }
+        }
+
+        function displayQuote() {
+            if (currentIndex >= quotes.length) {
+                currentIndex = 0;
+            }
+            document.getElementById('quote').innerText = quotes[currentIndex];
+            currentIndex++;
+        }
+
+        function setupAutoChangeQuote() {
+            setInterval(() => {
+                displayQuote();
+            }, 3600000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuotes();
+            setupAutoChangeQuote();
+        });
+
+        document.addEventListener('click', () => {
+            displayQuote();
+        });
+
+    </script>
+</head>
+<body>
+    <div id="quote"></div>
+</body>
+</html>
